@@ -5,7 +5,8 @@ RUN groupadd -g 1117 tdr && useradd -u 1117 -g tdr -m tdr && \
     mkdir -p /etc/canadiana /var/log/tdr /var/lock/tdr && ln -s /home/tdr /etc/canadiana/tdr && chown tdr.tdr /var/log/tdr /var/lock/tdr && \
     apt-get update && apt-get install -y cpanminus build-essential libxml-libxml-perl libxml-libxslt-perl rsync && apt-get clean
 
-RUN apt-get update && apt-get install -y libxml2-utils openjdk-6-jdk subversion && apt-get clean
+RUN groupadd -g 1115 cihm && useradd -u 1015 -g cihm -m cihm && \ 
+    ln -s /home/tdr /etc/canadiana/wip && apt-get update && apt-get install -y libxml2-utils openjdk-6-jdk subversion poppler-utils imagemagick perlmagick && apt-get clean
 
 # JHOVE needs to be able to validate abbyy finereader generated files, and loc.gov now has firewall.
 RUN mkdir -p /opt/xml && svn co -r 6750 http://svn.c7a.ca/svn/c7a/xml/trunk /opt/xml/current && \
@@ -24,4 +25,5 @@ RUN curl -OL http://software.openpreservation.org/rel/jhove/jhove-1.16.jar && \
 ENV PERL_CPANM_OPT "--mirror http://feta.office.c7a.ca/stacks/c7a-perl-devel/ --mirror http://www.cpan.org/"
 RUN cpanm -n --installdeps . && rm -rf /root/.cpanm || (cat /root/.cpanm/work/*/build.log && exit 1)
 
+# Sometimes 'tdr', sometimes 'cihm'.  Picked one for the default
 USER tdr
