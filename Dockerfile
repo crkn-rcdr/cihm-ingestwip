@@ -18,12 +18,14 @@ WORKDIR /home/tdr
 COPY cpanfile* *.conf *.xml /home/tdr/
 
 # Build recent JHOVE. Reports are currently added to SIP. Failed validation doesn't stop processing
-RUN curl -OL http://software.openpreservation.org/rel/jhove/jhove-1.16.jar && \
-    java -jar jhove-1.16.jar jhove-auto-install.xml && mv jhove.conf /opt/jhove/conf
+RUN curl -OL http://software.openpreservation.org/rel/jhove/jhove-1.18.jar && \
+    java -jar jhove-1.18.jar jhove-auto-install.xml && mv jhove.conf /opt/jhove/conf
 
 # Our application is perl code, which we added to a local PINTO server as modules.  Other dependencies are from CPAN.
 ENV PERL_CPANM_OPT "--mirror http://feta.office.c7a.ca/stacks/c7a-perl-devel/ --mirror http://www.cpan.org/"
 RUN cpanm -n --installdeps . && rm -rf /root/.cpanm || (cat /root/.cpanm/work/*/build.log && exit 1)
+
+#RUN curl -OL http://feta.office.c7a.ca/deploy/CIHM-WIP-0.15.tar.gz && cpanm CIHM-WIP-0.15.tar.gz
 
 # Sometimes 'tdr', sometimes 'cihm'.  Picked one for the default
 USER tdr
