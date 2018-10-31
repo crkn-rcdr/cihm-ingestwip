@@ -2,7 +2,9 @@ requires 'CIHM::TDR';
 requires 'CIHM::Meta';
 requires 'CIHM::METS::parse';
 requires 'CIHM::METS::App';
-requires 'CIHM::WIP';
+requires 'CIHM::WIP', '0.17';
+# Seems to be a problem compiling versions 4.51 and beyond... Likely problem with old perl, but not worth diagnosing at the moment...
+requires 'IO::AIO', '==4.5';
 requires 'Log::Log4perl';
 requires 'common::sense';
 requires 'MIME::Types';
