@@ -1,12 +1,12 @@
-FROM ubuntu:trusty-20170817
+FROM ubuntu:trusty-20181115
 
 # Same layer as cihm-metadatabus -- benefit to keeping in sync
 RUN groupadd -g 1117 tdr && useradd -u 1117 -g tdr -m tdr && \
     mkdir -p /etc/canadiana /var/log/tdr /var/lock/tdr && ln -s /home/tdr /etc/canadiana/tdr && chown tdr.tdr /var/log/tdr /var/lock/tdr && \
-    apt-get update && apt-get install -y cpanminus build-essential libxml-libxml-perl libxml-libxslt-perl rsync && apt-get clean
+    apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq cpanminus build-essential libxml-libxml-perl libxml-libxslt-perl libio-aio-perl rsync && apt-get clean
 
 RUN groupadd -g 1115 cihm && useradd -u 1015 -g cihm -m cihm && \ 
-    ln -s /home/tdr /etc/canadiana/wip && apt-get update && apt-get install -y libxml2-utils openjdk-6-jdk subversion poppler-utils imagemagick perlmagick && apt-get clean
+    ln -s /home/tdr /etc/canadiana/wip && apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq libxml2-utils openjdk-6-jdk subversion poppler-utils imagemagick perlmagick && apt-get clean
 
 # JHOVE needs to be able to validate abbyy finereader generated files, and loc.gov now has firewall.
 RUN mkdir -p /opt/xml && svn co -r 6750 http://svn.c7a.ca/svn/c7a/xml/trunk /opt/xml/current && \
@@ -22,10 +22,10 @@ RUN curl -OL http://software.openpreservation.org/rel/jhove/jhove-1.18.jar && \
     java -jar jhove-1.18.jar jhove-auto-install.xml && mv jhove.conf /opt/jhove/conf
 
 # Our application is perl code, which we added to a local PINTO server as modules.  Other dependencies are from CPAN.
-ENV PERL_CPANM_OPT "--mirror http://feta.office.c7a.ca/stacks/c7a-perl-devel/ --mirror http://www.cpan.org/"
+ENV PERL_CPANM_OPT "--mirror http://pinto.c7a.ca/stacks/c7a-perl-devel/ --mirror http://www.cpan.org/"
 RUN cpanm -n --installdeps . && rm -rf /root/.cpanm || (cat /root/.cpanm/work/*/build.log && exit 1)
 
-#RUN curl -OL http://feta.office.c7a.ca/deploy/CIHM-WIP-0.15.tar.gz && cpanm CIHM-WIP-0.15.tar.gz
+#RUN curl -OL http://pinto.c7a.ca/deploy/CIHM-WIP-0.15.tar.gz && cpanm CIHM-WIP-0.15.tar.gz
 
 # Sometimes 'tdr', sometimes 'cihm'.  Picked one for the default
 USER tdr
