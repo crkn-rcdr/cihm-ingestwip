@@ -1,4 +1,4 @@
-FROM ubuntu:trusty-20181115
+FROM ubuntu:trusty-20190122
 
 # Same layer as cihm-metadatabus -- benefit to keeping in sync
 RUN groupadd -g 1117 tdr && useradd -u 1117 -g tdr -m tdr && \
@@ -13,10 +13,11 @@ RUN groupadd -g 1115 cihm && useradd -u 1015 -g cihm -m cihm && \
 RUN sed -ie 's/rights="none" pattern="PDF" \/>/rights="read|write" pattern="PDF" \/>\n<policy domain="coder" rights="read|write" pattern="LABEL" \/>/' /etc/ImageMagick/policy.xml
 
 # JHOVE needs to be able to validate abbyy finereader generated files, and loc.gov now has firewall.
-RUN mkdir -p /opt/xml && svn co -r 6750 http://svn.c7a.ca/svn/c7a/xml/trunk /opt/xml/current && \
+RUN mkdir -p /opt/xml && svn co https://github.com/crkn-rcdr/Digital-Preservation.git/trunk/xml /opt/xml/current && \
     xmlcatalog --noout --add uri http://www.loc.gov/standards/xlink/xlink.xsd file:///opt/xml/current/unpublished/xsd/xlink.xsd /etc/xml/catalog && \
     xmlcatalog --noout --add uri http://www.loc.gov/alto/v3/alto-3-0.xsd file:///opt/xml/current/unpublished/xsd/alto-3-0.xsd /etc/xml/catalog && \
-    xmlcatalog --noout --add uri http://www.loc.gov/alto/v3/alto-3-1.xsd file:///opt/xml/current/unpublished/xsd/alto-3-1.xsd /etc/xml/catalog
+    xmlcatalog --noout --add uri http://www.loc.gov/alto/v3/alto-3-1.xsd file:///opt/xml/current/unpublished/xsd/alto-3-1.xsd /etc/xml/catalog && \
+    xmlcatalog --noout --add uri http://www.w3.org/2001/03/xml.xsd file:///opt/xml/current/unpublished/xsd/xml.xsd /etc/xml/catalog
 
 WORKDIR /home/tdr
 COPY cpanfile* *.conf *.xml /home/tdr/
