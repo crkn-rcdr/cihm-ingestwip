@@ -2,7 +2,7 @@ requires 'CIHM::TDR';
 requires 'CIHM::Meta';
 requires 'CIHM::METS::parse';
 requires 'CIHM::METS::App';
-requires 'CIHM::WIP', '0.19';
+requires 'CIHM::WIP', '0.20';
 requires 'Log::Log4perl';
 requires 'common::sense';
 requires 'MIME::Types';
