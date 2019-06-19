@@ -1,9 +1,31 @@
-FROM ubuntu:trusty-20190122
+FROM ubuntu:trusty-20190515
 
 # Same layer as cihm-metadatabus -- benefit to keeping in sync
 RUN groupadd -g 1117 tdr && useradd -u 1117 -g tdr -m tdr && \
     mkdir -p /etc/canadiana /var/log/tdr /var/lock/tdr && ln -s /home/tdr /etc/canadiana/tdr && chown tdr.tdr /var/log/tdr /var/lock/tdr && \
-    apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq cpanminus build-essential libxml-libxml-perl libxml-libxslt-perl libio-aio-perl rsync && apt-get clean
+    apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq cpanminus build-essential libxml-libxml-perl libxml-libxslt-perl libio-aio-perl rsync cron postfix && \
+    apt-get clean
+
+ENV TINI_VERSION 0.18.0
+RUN set -ex; \
+    \
+    apt-get update; \
+    apt-get install -y --no-install-recommends wget; \
+    rm -rf /var/lib/apt/lists/*; \
+    \
+    dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')"; \
+    \
+# install tini
+    wget -O /usr/local/bin/tini "https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini-$dpkgArch"; \
+    wget -O /usr/local/bin/tini.asc "https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini-$dpkgArch.asc"; \
+    export GNUPGHOME="$(mktemp -d)"; \
+    gpg --keyserver ha.pool.sks-keyservers.net --recv-keys 595E85A6B1B4779EA4DAAEC70B588DFF0527A9B7; \
+    gpg --batch --verify /usr/local/bin/tini.asc /usr/local/bin/tini; \
+    rm -r "$GNUPGHOME" /usr/local/bin/tini.asc; \
+    chmod +x /usr/local/bin/tini; \
+    tini --version; \
+    \
+    apt-get purge -y --auto-remove wget ; apt-get clean
 
 RUN groupadd -g 1115 cihm && useradd -u 1015 -g cihm -m cihm && \ 
     ln -s /home/tdr /etc/canadiana/wip && apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq libxml2-utils openjdk-6-jdk subversion poppler-utils imagemagick perlmagick && apt-get clean
@@ -21,6 +43,7 @@ RUN mkdir -p /opt/xml && svn co https://github.com/crkn-rcdr/Digital-Preservatio
 
 WORKDIR /home/tdr
 COPY cpanfile* *.conf *.xml /home/tdr/
+COPY aliases /etc/aliases
 
 # Build recent JHOVE. Reports are currently added to SIP. Failed validation doesn't stop processing
 RUN curl -OL http://software.openpreservation.org/rel/jhove/jhove-1.18.jar && \
@@ -32,5 +55,6 @@ RUN cpanm -n --installdeps . && rm -rf /root/.cpanm || (cat /root/.cpanm/work/*/
 
 #RUN curl -OL http://pinto.c7a.ca/deploy/CIHM-WIP-0.15.tar.gz && cpanm CIHM-WIP-0.15.tar.gz
 
-# Sometimes 'tdr', sometimes 'cihm'.  Picked one for the default
-USER tdr
+COPY docker-entrypoint.sh /
+ENTRYPOINT ["tini", "--", "/docker-entrypoint.sh"]
+USER root
