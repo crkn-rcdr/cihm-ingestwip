@@ -7,5 +7,6 @@ module.exports = {
     ) {
       emit([doc.filesystem.stage, doc.updated], null);
     }
-  }
+  },
+  reduce: "_count"
 };

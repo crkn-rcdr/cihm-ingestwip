@@ -4,5 +4,6 @@ module.exports = {
       return;
     }
     emit([doc.exportReq.exporthost, doc.exportReq.exportdate], null);
-  }
+  },
+  reduce: "_count"
 };

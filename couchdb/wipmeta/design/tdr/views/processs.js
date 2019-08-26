@@ -13,5 +13,6 @@ module.exports = {
     }
     datep = req.date.split("T");
     emit([req.status, req.message !== "", datep[0], datep[1]], req.request);
-  }
+  },
+  reduce: "_count"
 };

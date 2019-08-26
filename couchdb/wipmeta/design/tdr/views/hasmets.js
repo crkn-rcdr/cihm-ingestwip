@@ -3,5 +3,6 @@ module.exports = {
     if ("_attachments" in doc || "label" in doc) {
       emit(doc.updated, null);
     }
-  }
+  },
+  reduce: "_count"
 };

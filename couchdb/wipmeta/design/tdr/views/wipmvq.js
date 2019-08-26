@@ -11,5 +11,6 @@ module.exports = {
     if ("request" in req && req.request === "move") {
       emit(req.date, null);
     }
-  }
+  },
+  reduce: "_count"
 };

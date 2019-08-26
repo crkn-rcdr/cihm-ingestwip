@@ -16,5 +16,6 @@ module.exports = {
         emit(req.date, null);
       }
     }
-  }
+  },
+  reduce: "_count"
 };

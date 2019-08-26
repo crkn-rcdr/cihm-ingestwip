@@ -8,5 +8,6 @@ module.exports = {
     ) {
       emit(null, null);
     }
-  }
+  },
+  reduce: "_count"
 };

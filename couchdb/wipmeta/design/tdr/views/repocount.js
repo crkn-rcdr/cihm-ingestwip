@@ -3,5 +3,6 @@ module.exports = {
     if ("repos" in doc && Array.isArray(doc.repos)) {
       emit(doc.repos.length, null);
     }
-  }
+  },
+  reduce: "_count"
 };

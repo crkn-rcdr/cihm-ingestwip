@@ -14,5 +14,6 @@ module.exports = {
       }
       return true;
     });
-  }
+  },
+  reduce: "_count"
 };
