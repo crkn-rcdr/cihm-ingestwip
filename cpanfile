@@ -1,8 +1,3 @@
-requires 'CIHM::TDR';
-requires 'CIHM::Meta';
-requires 'CIHM::METS::parse';
-requires 'CIHM::METS::App';
-requires 'CIHM::WIP', '0.20';
 requires 'Log::Log4perl';
 requires 'common::sense';
 requires 'MIME::Types';
@@ -30,6 +25,12 @@ requires 'Image::Magick';
 requires 'AnyEvent';
 requires 'AnyEvent::Fork';
 requires 'AnyEvent::Fork::Pool';
+
+# Used by Mallet
+requires 'File::Slurp';
+
+# Used by CIHM::WIP::App::Walk
+requires 'Filesys::DfPortable';
 
 # Used by CIHM::METS::App::Marc
 requires 'MARC::Batch';

@@ -13,6 +13,10 @@
 
 set -e
 
+export PERL5LIB=/home/tdr/CIHM-Meta/lib:/home/tdr/CIHM-METS-App/lib:/home/tdr/CIHM-METS-parse/lib:/home/tdr/CIHM-TDR/lib:/home/tdr/CIHM-WIP/lib
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/tdr/CIHM-Meta/bin:/home/tdr/CIHM-METS-App/bin:/home/tdr/CIHM-METS-parse/bin:/home/tdr/CIHM-TDR/bin:/home/tdr/CIHM-WIP/bin
+
+
 cronandmail ()
 {
 	# Postfix setup
@@ -29,13 +33,23 @@ cronandmail ()
 }
 
 
+echo "export PATH=$PATH" >> /root/.profile
+echo "export PERL5LIB=$PERL5LIB" >> /root/.profile
+
+echo "export PATH=$PATH" >> /home/tdr/.profile
+echo "export PERL5LIB=$PERL5LIB" >> /home/tdr/.profile
+chown tdr.tdr /home/tdr/.profile
+
+echo "export PATH=$PATH" >> /home/cihm/.profile
+echo "export PERL5LIB=$PERL5LIB" >> /home/cihm/.profile
+chown cihm.cihm /home/cihm/.profile
 
 echo "MAILTO=sysadmin@c7a.ca" > /etc/cron.d/ingestwip
-echo "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" >> /etc/cron.d/ingestwip
-
+echo "PATH=$PATH" >> /etc/cron.d/ingestwip
+echo "PERL5LIB=$PERL5LIB" >> /etc/cron.d/ingestwip
 
 if [ "$1" = 'packaging' ]; then
-	cat <<-IWCRON >>/etc/cron.d/ingestwip
+	cat <<-IWCRONP >>/etc/cron.d/ingestwip
 # Move files between packaging stages
 * * * * * cihm /bin/bash -c "wip-move"
 # Look for work, including generating SIPs
@@ -44,23 +58,25 @@ if [ "$1" = 'packaging' ]; then
 35 6 * * 1-5 cihm /bin/bash -c "wip walk --quiet --report=rmcormond@crkn.ca,bstover@crkn.ca,pbrisson@crkn.ca,mgott@crkn.ca"
 # Clean packaging trashcan
 35 0 * * * cihm /bin/bash -c "find /opt/wip/Trashcan -mindepth 1 -delete"
-IWCRON
+IWCRONP
         cronandmail
 elif [ "$1" = 'ingest' ]; then
-        cat <<-IWCRON >>/etc/cron.d/ingestwip
+        cat <<-IWCRONI >>/etc/cron.d/ingestwip
 # Ingest (SIP or metadata updates into AIPs)
 5/10 * * * * tdr /bin/bash -c "tdringest --maxprocs=2"
 # Clean out the directory used for temporary files during ingest
 36 4 * * * tdr /bin/bash -c "mkdir -p /home/tdr/tempIngest/sipvalidate ; find /home/tdr/tempIngest/sipvalidate -mindepth 1 -maxdepth 1 -mmin +360 -exec rm -rf {} \;"
-IWCRON
+IWCRONI
         cronandmail
 elif [ "$1" = 'tdr' ]; then
-	shift
-	exec sudo -u tdr "$@"
+    shift
+    # Otherwise run what was asked as the 'tdr' user
+    exec sudo -u tdr -i "$@"
 elif [ "$1" = 'cihm' ]; then
-        shift
-        exec sudo -u cihm "$@"
+    shift
+    # Otherwise run what was asked as the 'cihm' user
+    exec sudo -u cihm -i "$@"
 else
-	echo "First parameter must be known"
-	exit 1
+    echo "First parameter must be known"
+    exit 1
 fi

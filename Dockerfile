@@ -49,11 +49,13 @@ COPY aliases /etc/aliases
 RUN curl -OL http://software.openpreservation.org/rel/jhove/jhove-1.18.jar && \
     java -jar jhove-1.18.jar jhove-auto-install.xml && mv jhove.conf /opt/jhove/conf
 
-# Our application is perl code, which we added to a local PINTO server as modules.  Other dependencies are from CPAN.
-ENV PERL_CPANM_OPT "--mirror http://pinto.c7a.ca/stacks/c7a-perl-devel/ --mirror http://www.cpan.org/"
 RUN cpanm -n --installdeps . && rm -rf /root/.cpanm || (cat /root/.cpanm/work/*/build.log && exit 1)
 
-#RUN curl -OL http://pinto.c7a.ca/deploy/CIHM-WIP-0.15.tar.gz && cpanm CIHM-WIP-0.15.tar.gz
+COPY CIHM-Meta CIHM-Meta
+COPY CIHM-METS-App CIHM-METS-App
+COPY CIHM-METS-parse CIHM-METS-parse
+COPY CIHM-TDR CIHM-TDR
+COPY CIHM-WIP CIHM-WIP
 
 COPY docker-entrypoint.sh /
 ENTRYPOINT ["tini", "--", "/docker-entrypoint.sh"]
