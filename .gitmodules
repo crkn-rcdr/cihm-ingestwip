@@ -13,3 +13,6 @@
 [submodule "CIHM-WIP"]
 	path = CIHM-WIP
 	url = git@github.com:crkn-rcdr/CIHM-WIP.git
+[submodule "CIHM-Normalise"]
+	path = CIHM-Normalise
+	url = git@github.com:crkn-rcdr/CIHM-Normalise.git

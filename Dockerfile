@@ -51,11 +51,13 @@ RUN curl -OL http://software.openpreservation.org/rel/jhove/jhove-1.18.jar && \
 
 RUN cpanm -n --installdeps . && rm -rf /root/.cpanm || (cat /root/.cpanm/work/*/build.log && exit 1)
 
+COPY CIHM-Normalise CIHM-Normalise
 COPY CIHM-Meta CIHM-Meta
 COPY CIHM-METS-App CIHM-METS-App
 COPY CIHM-METS-parse CIHM-METS-parse
 COPY CIHM-TDR CIHM-TDR
 COPY CIHM-WIP CIHM-WIP
+
 
 COPY docker-entrypoint.sh /
 ENTRYPOINT ["tini", "--", "/docker-entrypoint.sh"]
