@@ -13,8 +13,8 @@
 
 set -e
 
-export PERL5LIB=/home/tdr/CIHM-Meta/lib:/home/tdr/CIHM-METS-App/lib:/home/tdr/CIHM-METS-parse/lib:/home/tdr/CIHM-TDR/lib:/home/tdr/CIHM-WIP/lib:/home/tdr/CIHM-Normalise/lib
-export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/tdr/CIHM-Meta/bin:/home/tdr/CIHM-METS-App/bin:/home/tdr/CIHM-METS-parse/bin:/home/tdr/CIHM-TDR/bin:/home/tdr/CIHM-WIP/bin:/home/tdr/CIHM-Normalise/bin
+export PERL5LIB=/home/tdr/CIHM-Meta/lib:/home/tdr/CIHM-METS-App/lib:/home/tdr/CIHM-METS-parse/lib:/home/tdr/CIHM-TDR/lib:/home/tdr/CIHM-Swift/lib:/home/tdr/CIHM-WIP/lib:/home/tdr/CIHM-Normalise/lib
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/tdr/CIHM-Meta/bin:/home/tdr/CIHM-METS-App/bin:/home/tdr/CIHM-METS-parse/bin:/home/tdr/CIHM-TDR/bin:/home/tdr/CIHM-Swift/bin:/home/tdr/CIHM-WIP/bin:/home/tdr/CIHM-Normalise/bin
 
 
 cronandmail ()
