@@ -1,10 +1,8 @@
-FROM ubuntu:trusty-20190515
+FROM buildpack-deps:buster
 
-# Same layer as cihm-metadatabus -- benefit to keeping in sync
 RUN groupadd -g 1117 tdr && useradd -u 1117 -g tdr -m tdr && \
     mkdir -p /etc/canadiana /var/log/tdr /var/lock/tdr && ln -s /home/tdr /etc/canadiana/tdr && chown tdr.tdr /var/log/tdr /var/lock/tdr && \
-    apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq cpanminus build-essential libxml-libxml-perl libxml-libxslt-perl libio-aio-perl rsync cron postfix && \
-    apt-get clean
+    apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq cpanminus build-essential libxml-libxml-perl libxml-libxslt-perl libio-aio-perl rsync cron postfix sudo && apt-get clean
 
 ENV TINI_VERSION 0.18.0
 RUN set -ex; \
@@ -28,13 +26,13 @@ RUN set -ex; \
     apt-get purge -y --auto-remove wget ; apt-get clean
 
 RUN groupadd -g 1115 cihm && useradd -u 1015 -g cihm -m cihm && \ 
-    ln -s /home/tdr /etc/canadiana/wip && apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq libxml2-utils openjdk-6-jdk subversion poppler-utils imagemagick perlmagick && apt-get clean
+    ln -s /home/tdr /etc/canadiana/wip && apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq xml-core libxml2-utils subversion poppler-utils imagemagick-6.q16 libimage-magick-perl ghostscript && apt-get clean
 
 # Upgrades to Imagemagik now have a policy file which needs to be adjusted.
 # https://stackoverflow.com/questions/42928765/convertnot-authorized-aaaa-error-constitute-c-readimage-453
-RUN sed -ie 's/rights="none" pattern="PDF" \/>/rights="read|write" pattern="PDF" \/>\n<policy domain="coder" rights="read|write" pattern="LABEL" \/>/' /etc/ImageMagick/policy.xml
+RUN echo "\n<policy domain=\"coder\" rights=\"read|write\" pattern=\"PDF\" />\n<policy domain=\"coder\" rights=\"read|write\" pattern=\"LABEL\" \/>/" >>/etc/ImageMagick-6/policy.xml
 
-# JHOVE needs to be able to validate abbyy finereader generated files, and loc.gov now has firewall.
+# Cache some xsd's for validation
 RUN mkdir -p /opt/xml && svn co https://github.com/crkn-rcdr/Digital-Preservation.git/trunk/xml /opt/xml/current && \
     xmlcatalog --noout --add uri http://www.loc.gov/standards/xlink/xlink.xsd file:///opt/xml/current/unpublished/xsd/xlink.xsd /etc/xml/catalog && \
     xmlcatalog --noout --add uri http://www.loc.gov/alto/v3/alto-3-0.xsd file:///opt/xml/current/unpublished/xsd/alto-3-0.xsd /etc/xml/catalog && \
@@ -44,10 +42,6 @@ RUN mkdir -p /opt/xml && svn co https://github.com/crkn-rcdr/Digital-Preservatio
 WORKDIR /home/tdr
 COPY cpanfile* *.conf *.xml /home/tdr/
 COPY aliases /etc/aliases
-
-# Build recent JHOVE. Reports are currently added to SIP. Failed validation doesn't stop processing
-RUN curl -OL http://software.openpreservation.org/rel/jhove/jhove-1.18.jar && \
-    java -jar jhove-1.18.jar jhove-auto-install.xml && mv jhove.conf /opt/jhove/conf
 
 RUN cpanm -n --installdeps . && rm -rf /root/.cpanm || (cat /root/.cpanm/work/*/build.log && exit 1)
 
