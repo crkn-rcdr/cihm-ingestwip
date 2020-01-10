@@ -63,7 +63,7 @@ IWCRONP
 elif [ "$1" = 'ingest' ]; then
         cat <<-IWCRONI >>/etc/cron.d/ingestwip
 # Ingest (SIP or metadata updates into AIPs)
-5-55/10 * * * * tdr /bin/bash -c "tdringest --maxprocs=2"
+5-55/10 * * * * tdr /bin/bash -c "tdringest --maxprocs=4"
 # Clean out the directory used for temporary files during ingest
 36 4 * * * tdr /bin/bash -c "mkdir -p /home/tdr/tempIngest/sipvalidate ; find /home/tdr/tempIngest/sipvalidate -mindepth 1 -maxdepth 1 -mmin +360 -exec rm -rf {} \;"
 IWCRONI
