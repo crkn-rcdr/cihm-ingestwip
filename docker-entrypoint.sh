@@ -53,7 +53,7 @@ if [ "$1" = 'packaging' ]; then
 # Move files between packaging stages
 * * * * * cihm /bin/bash -c "wip-move"
 # Look for work, including generating SIPs
-*/10 * * * * cihm /bin/bash -c "wip-tdrexport ; wip-unitize; wip-imageconv ; wip walk --quiet ; wip-metsproc ; mallet"
+*/10 * * * * cihm /bin/bash -c "wip-copy2swift ; wip-tdrexport ; wip-unitize; wip-imageconv ; wip walk --quiet ; wip-metsproc ; mallet"
 # Weekday morning report
 35 6 * * 1-5 cihm /bin/bash -c "wip walk --quiet --report=rmcormond@crkn.ca,bstover@crkn.ca,pbrisson@crkn.ca,mgott@crkn.ca"
 # Clean packaging trashcan
