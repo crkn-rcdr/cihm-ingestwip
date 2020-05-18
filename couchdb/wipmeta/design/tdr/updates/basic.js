@@ -34,14 +34,21 @@ module.exports = function (doc, req) {
 
   // Generalized process request related fields
   if ("processreq" in updatedoc) {
-    var processReq = JSON.parse(updatedoc.processreq);
-    if (!("date" in processReq)) {
-      processReq.date = nowdates;
+    function addRequest(processReq) {
+      if (!("date" in processReq)) {
+        processReq.date = nowdates;
+      }
+      doc.processReq.push(processReq);
     }
     if (!"processReq" in doc || !Array.isArray(doc.processReq)) {
       doc.processReq = [];
     }
-    doc.processReq.push(processReq);
+    var processReqData = JSON.parse(updatedoc.processreq);
+    if (Array.isArray(processReqData)) {
+      processReqData.forEach(addRequest);
+    } else {
+      addRequest(processReqData);
+    }
     updated = true;
   }
   if ("processing" in updatedoc) {
