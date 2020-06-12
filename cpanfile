@@ -15,7 +15,7 @@ requires 'Capture::Tiny';
 requires 'Role::REST::Client';
 requires 'Crypt::JWT';
 requires 'Switch';
-requires 'Archive::BagIt', '0.053.3';
+requires 'Archive::BagIt', '== 0.053.3';
 requires 'Archive::BagIt::App';
 requires 'Filesys::Df';
 requires 'BSD::Resource';
