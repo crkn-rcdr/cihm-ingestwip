@@ -55,7 +55,7 @@ if [ "$1" = 'packaging' ]; then
 # Look for work, including generating SIPs
 */10 * * * * cihm /bin/bash -c "wip-copy2swift ; wip-tdrexport ; wip-unitize; wip-imageconv ; wip walk --quiet ; wip-metsproc ; mallet"
 # Weekday morning report
-35 6 * * 1-5 cihm /bin/bash -c "wip walk --quiet --report=rmcormond@crkn.ca,bstover@crkn.ca,pbrisson@crkn.ca"
+35 6 * * 1-5 cihm /bin/bash -c "wip walk --quiet --report=rmcormond@crkn.ca,bstover@crkn.ca"
 # Clean packaging trashcan
 35 0 * * * cihm /bin/bash -c "find /opt/wip/Trashcan -mindepth 1 -delete"
 IWCRONP
