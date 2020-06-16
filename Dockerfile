@@ -40,10 +40,11 @@ RUN mkdir -p /opt/xml && svn co https://github.com/crkn-rcdr/Digital-Preservatio
     xmlcatalog --noout --add uri http://www.w3.org/2001/03/xml.xsd file:///opt/xml/current/unpublished/xsd/xml.xsd /etc/xml/catalog
 
 WORKDIR /home/tdr
-COPY cpanfile* *.conf *.xml /home/tdr/
+COPY Archive-BagIt-0.054.tar.gz cpanfile* *.conf *.xml /home/tdr/
 COPY aliases /etc/aliases
 
 RUN cpanm -n --installdeps . && rm -rf /root/.cpanm || (cat /root/.cpanm/work/*/build.log && exit 1)
+RUN cpanm -n --reinstall /home/tdr/Archive-BagIt-0.054.tar.gz && rm -rf /root/.cpanm || (cat /root/.cpanm/work/*/build.log && exit 1)
 
 COPY CIHM-Normalise CIHM-Normalise
 COPY CIHM-Meta CIHM-Meta
