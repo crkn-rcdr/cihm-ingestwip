@@ -7,9 +7,6 @@
 [submodule "CIHM-METS-App"]
 	path = CIHM-METS-App
 	url = git@github.com:crkn-rcdr/CIHM-METS-App.git
-[submodule "CIHM-METS-parse"]
-	path = CIHM-METS-parse
-	url = git@github.com:crkn-rcdr/CIHM-METS-parse.git
 [submodule "CIHM-WIP"]
 	path = CIHM-WIP
 	url = git@github.com:crkn-rcdr/CIHM-WIP.git
