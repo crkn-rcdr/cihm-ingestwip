@@ -49,7 +49,6 @@ RUN cpanm -n --reinstall /home/tdr/Archive-BagIt-0.054.tar.gz && rm -rf /root/.c
 COPY CIHM-Normalise CIHM-Normalise
 COPY CIHM-Meta CIHM-Meta
 COPY CIHM-METS-App CIHM-METS-App
-COPY CIHM-METS-parse CIHM-METS-parse
 COPY CIHM-TDR CIHM-TDR
 COPY CIHM-Swift CIHM-Swift
 COPY CIHM-WIP CIHM-WIP
