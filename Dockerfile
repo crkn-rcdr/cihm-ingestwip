@@ -1,40 +1,16 @@
-FROM buildpack-deps:buster
+FROM perl:5.34.0
 
 RUN groupadd -g 1117 tdr && useradd -u 1117 -g tdr -m tdr && \
     mkdir -p /etc/canadiana /var/log/tdr /var/lock/tdr && ln -s /home/tdr /etc/canadiana/tdr && chown tdr.tdr /var/log/tdr /var/lock/tdr && \
     ln -sf /usr/share/zoneinfo/America/Montreal /etc/localtime && \
-    apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq cpanminus build-essential libxml-libxml-perl libxml-libxslt-perl libio-aio-perl rsync cron postfix sudo && apt-get clean
-
-ENV TINI_VERSION 0.19.0
-RUN set -ex; \
-    \
-    apt-get update; \
-    apt-get install -y --no-install-recommends wget; \
-    rm -rf /var/lib/apt/lists/*; \
-    \
-    dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')"; \
-    \
-# install tini
-    export GNUPGHOME="$(mktemp -d)"; \
-    ( \
-        gpg --batch --keyserver ipv4.pool.sks-keyservers.net  --recv-keys 595E85A6B1B4779EA4DAAEC70B588DFF0527A9B7 \
-        || gpg --batch --keyserver ha.pool.sks-keyservers.net  --recv-keys 595E85A6B1B4779EA4DAAEC70B588DFF0527A9B7 \
-        || gpg --batch --keyserver pool.sks-keyservers.net  --recv-keys 595E85A6B1B4779EA4DAAEC70B588DFF0527A9B7 \
-        || gpg --batch --keyserver pgp.mit.edu              --recv-keys 595E85A6B1B4779EA4DAAEC70B588DFF0527A9B7 \
-        || gpg --batch --keyserver keyserver.pgp.com        --recv-keys 595E85A6B1B4779EA4DAAEC70B588DFF0527A9B7 \
-        || gpg --batch --keyserver p80.pool.sks-keyservers.net --recv-keys 595E85A6B1B4779EA4DAAEC70B588DFF0527A9B7 \
-    ) ; \
-    wget -O /usr/local/bin/tini "https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini-$dpkgArch"; \
-    wget -O /usr/local/bin/tini.asc "https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini-$dpkgArch.asc"; \
-    gpg --batch --verify /usr/local/bin/tini.asc /usr/local/bin/tini; \
-    rm -r "$GNUPGHOME" /usr/local/bin/tini.asc; \
-    chmod +x /usr/local/bin/tini; \
-    tini --version; \
-    \
-    apt-get purge -y --auto-remove wget ; apt-get clean
-
-RUN groupadd -g 1115 cihm && useradd -u 1015 -g cihm -m cihm && \ 
-    ln -s /home/tdr /etc/canadiana/wip && apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq xml-core libxml2-utils subversion poppler-utils imagemagick-6.q16 libimage-magick-perl ghostscript && apt-get clean
+    ln -s /usr/include/x86_64-linux-gnu/ImageMagick-6/ /usr/local/include/ && \
+    ln -s /home/tdr /etc/canadiana/wip && \
+    groupadd -g 1115 cihm && useradd -u 1015 -g cihm -m cihm && \
+    apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq rsync sudo cpanminus build-essential \
+    xml-core subversion poppler-utils  imagemagick-6-common libmagickcore-6.q16-6 ghostscript \
+    libxml-libxml-perl libxml-libxslt-perl \
+    libxml2-dev libxml2-utils xml-core libaio-dev libxslt1-dev libssl-dev && \
+    apt-get clean
 
 # Upgrades to Imagemagik now have a policy file which needs to be adjusted.
 # https://stackoverflow.com/questions/42928765/convertnot-authorized-aaaa-error-constitute-c-readimage-453
@@ -62,6 +38,7 @@ COPY CIHM-Swift CIHM-Swift
 COPY CIHM-WIP CIHM-WIP
 
 
-COPY docker-entrypoint.sh /
-ENTRYPOINT ["tini", "--", "/docker-entrypoint.sh"]
-USER root
+ENV PERL5LIB /home/tdr/CIHM-Meta/lib:/home/tdr/CIHM-METS-App/lib:/home/tdr/CIHM-TDR/lib:/home/tdr/CIHM-Swift/lib:/home/tdr/CIHM-WIP/lib:/home/tdr/CIHM-Normalise/lib:/usr/share/perl5
+ENV PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/tdr/CIHM-Meta/bin:/home/tdr/CIHM-METS-App/bin:/home/tdr/CIHM-TDR/bin:/home/tdr/CIHM-Swift/bin:/home/tdr/CIHM-WIP/bin:/home/tdr/CIHM-Normalise/bin
+SHELL ["/bin/bash", "-c"]
+USER tdr
