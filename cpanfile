@@ -8,6 +8,7 @@ requires 'Config::General';
 requires 'DateTime';
 requires 'Date::Manip';
 requires 'JSON';
+requires 'JSON::XS';
 requires 'Types::Standard';
 requires 'MooseX::App';
 requires 'MooseX::Log::Log4perl';
@@ -24,10 +25,14 @@ requires 'File::Copy::Recursive';
 requires 'Text::CSV';
 requires 'Text::CSV_XS';
 requires 'Coro::Semaphore';
-requires 'Image::Magick';
+requires 'Image::Magick', '== 6.9.12';
 requires 'AnyEvent';
 requires 'AnyEvent::Fork';
 requires 'AnyEvent::Fork::Pool';
+requires 'XML::LibXSLT';
+requires 'XML::LibXML';
+requires 'IO::AIO';
+requires 'XML::Dumper';
 
 # Used by Mallet
 requires 'File::Slurp';
