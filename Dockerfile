@@ -30,14 +30,13 @@ COPY aliases /etc/aliases
 RUN cpanm -n --installdeps . && rm -rf /root/.cpanm || (cat /root/.cpanm/work/*/build.log && exit 1)
 RUN cpanm -n --reinstall /home/tdr/Archive-BagIt-0.054.tar.gz && rm -rf /root/.cpanm || (cat /root/.cpanm/work/*/build.log && exit 1)
 
-COPY CIHM-Normalise CIHM-Normalise
 COPY CIHM-METS-App CIHM-METS-App
 COPY CIHM-TDR CIHM-TDR
 COPY CIHM-Swift CIHM-Swift
 COPY CIHM-WIP CIHM-WIP
 
 
-ENV PERL5LIB /home/tdr/CIHM-METS-App/lib:/home/tdr/CIHM-TDR/lib:/home/tdr/CIHM-Swift/lib:/home/tdr/CIHM-WIP/lib:/home/tdr/CIHM-Normalise/lib:/usr/share/perl5
-ENV PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/tdr/CIHM-METS-App/bin:/home/tdr/CIHM-TDR/bin:/home/tdr/CIHM-Swift/bin:/home/tdr/CIHM-WIP/bin:/home/tdr/CIHM-Normalise/bin
+ENV PERL5LIB /home/tdr/CIHM-METS-App/lib:/home/tdr/CIHM-TDR/lib:/home/tdr/CIHM-Swift/lib:/home/tdr/CIHM-WIP/lib:/usr/share/perl5
+ENV PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/tdr/CIHM-METS-App/bin:/home/tdr/CIHM-TDR/bin:/home/tdr/CIHM-Swift/bin:/home/tdr/CIHM-WIP/bin
 SHELL ["/bin/bash", "-c"]
 USER tdr
