@@ -3,6 +3,6 @@
 # ingest is --user=tdr , WIP is --user=cihm
  
 docker build -t cihm-ingestwip . &&
-  docker run -it --user=cihm -v $(pwd)/CIHM-METS-App:/home/tdr/CIHM-METS-App -v $(pwd)/CIHM-Meta:/home/tdr/CIHM-Meta -v $(pwd)/CIHM-WIP:/home/tdr/CIHM-WIP \
+  docker run -it --user=cihm -v $(pwd)/CIHM-METS-App:/home/tdr/CIHM-METS-App -v $(pwd)/CIHM-WIP:/home/tdr/CIHM-WIP \
   -v $(pwd)/CIHM-TDR:/home/tdr/CIHM-TDR -v "/etc/canadiana/tdr.conf:/home/tdr/tdr.conf" -v "/var/log/tdr:/var/log/tdr" \
   -v "/var/lock/tdr:/var/lock/tdr" -v "/data/tempingest:/home/tdr/tempIngest"  cihm-ingestwip bash
