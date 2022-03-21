@@ -11,7 +11,6 @@ After logging in the /packaging/ directory has a series of subdirectories
   * Trashcan/ - This last one is special, as files are peridically cleared from the Trashcan.
 
 * Temp/ - Temporary files not used by any automation. Staff copy files here and then "move" in a single command into other directories to avoid tools trying to handle partially uploaded directories.
-* Metadata/ - Scanned periodically by `wip-metsproc` tool
 * Unitization/ - Scanned periodically by `wip-unitize` tool
 * aipdir/ - Temporary directory where AIPs are stored while they are being manipulated, prior to being copied to Swift repository.
 
