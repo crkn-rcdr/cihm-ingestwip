@@ -40,10 +40,6 @@ requires 'File::Slurp';
 # Used by CIHM::WIP::App::Walk
 requires 'Filesys::DfPortable';
 
-# Used by CIHM::METS::App::Marc
-requires 'MARC::Batch';
-requires 'MARC::File::XML';
-
 # Used by CIHM::Swift
 requires 'Furl';
 requires 'DateTime::Format::ISO8601';
