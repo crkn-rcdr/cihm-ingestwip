@@ -1,9 +1,6 @@
 [submodule "CIHM-TDR"]
 	path = CIHM-TDR
 	url = git@github.com:crkn-rcdr/CIHM-TDR.git
-[submodule "CIHM-METS-App"]
-	path = CIHM-METS-App
-	url = git@github.com:crkn-rcdr/CIHM-METS-App.git
 [submodule "CIHM-WIP"]
 	path = CIHM-WIP
 	url = git@github.com:crkn-rcdr/CIHM-WIP.git
