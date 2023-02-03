@@ -12,7 +12,10 @@ module.exports = function (doc, req) {
     try {
       updatedoc = JSON.parse(req.body);
     } catch (ignore) {
-      return [null, "could not parse body: " + req.body];
+      return [
+        null,
+        JSON.stringify({ return: "could not parse body: " + req.body }) + "\n",
+      ];
     }
   }
   if (!doc) {
