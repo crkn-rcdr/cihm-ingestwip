@@ -10,8 +10,7 @@ After logging in the /packaging/ directory has a series of subdirectories
   * Rejected/
   * Trashcan/ - This last one is special, as files are peridically cleared from the Trashcan.
 
-* Temp/ - Temporary files not used by any automation. Staff copy files here and then "move" in a single command into other directories to avoid tools trying to handle partially uploaded directories.
-* Unitization/ - Scanned periodically by `wip-unitize` tool
+* Temp/ - Temporary files not used by any automation. Staff copy files here and then "move" in a single command into other directories to avoid tools trying to handle partially uploaded directories.  This includes Temp/export/ which is the destination for the export function.
 * aipdir/ - Temporary directory where AIPs are stored while they are being manipulated, prior to being copied to Swift repository.
 
 * Readme.html - Simple html that will redirect a web browser to this page.
