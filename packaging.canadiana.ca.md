@@ -2,6 +2,9 @@
 
 Management of files used by the packaging system is done using tools such as FileZilla or Nautilus which support the sftp protocol.
 
+`sftp://packaging.canadiana.ca/home/cihm`
+
+
 After logging in the /packaging/ directory has a series of subdirectories
 
 * Stages which the files for a package can be in:
